@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 
@@ -5,10 +6,18 @@ public class PlayerInput : MonoBehaviour
 {
     PlayerActions playerActions;
 
+    public event EventHandler OnInteractAction;
+
     private void Awake()
     {
         playerActions = new PlayerActions();
         playerActions.PlayerActionss.Enable();
+        playerActions.PlayerActionss.interact.performed += Interact_performed;
+    }
+
+    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInteractAction?.Invoke(this, EventArgs.Empty);
     }
 
     public Vector2 GetMovementDirectionVectorNormalized()
